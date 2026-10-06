@@ -23,6 +23,7 @@ from intake_agent.conflicts import ConflictChecker, ConflictCheckResult, JsonCon
 from intake_agent.policy import IntakePolicy, load_policy
 from intake_agent.pricing import TokenCounts, cost_usd
 from intake_agent.prompts import SYSTEM_PROMPT, build_user_message
+from intake_agent.record import TriageRecord, assemble_record
 from intake_agent.schema import Enquiry, TriageDraft
 from intake_agent.tools import ToolContext
 
@@ -239,6 +240,22 @@ class ClaudeTriageAgent:
                 fallback_used=fallback_used,
             ),
             conflict_results=context.conflict_results,
+        )
+
+    def triage(self, enquiry: Enquiry) -> TriageRecord:
+        """Run the agent, then apply the code-enforced checks and routing rules."""
+        run = self.run(enquiry)
+        return assemble_record(
+            enquiry=enquiry,
+            arm="claude",
+            draft=run.draft,
+            failures=run.failures,
+            policy=self.policy,
+            checker=self.checker,
+            tool_conflict_results=run.conflict_results,
+            model=run.model,
+            usage=run.usage,
+            audit=run.audit,
         )
 
     def _read_final_turn(self, last: BetaMessage, failures: list[Failure]) -> TriageDraft | None:

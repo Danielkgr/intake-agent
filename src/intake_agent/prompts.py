@@ -52,7 +52,8 @@ policy.  For an out-of-scope matter, say the firm does not act in that area and 
 for a lawyer who does.  You may ask them to telephone the office if they have a court date or \
 deadline in the next few days.  Never give legal advice: do not comment on their rights, the \
 strength of their position, the law, or any time limit, do not tell them what to do about their \
-legal problem, and do not promise an outcome.
+legal problem, and do not promise an outcome.  Do not use the words "should", "must", \
+"recommend", or "advise" in the holding reply.
 - routing_reason explains the route in one sentence.
 
 When the record is complete, reply with the JSON object only."""
