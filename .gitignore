@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Secrets and local configuration.  Never commit an API key.
+.env
+.env.*
+!.env.example
+
+# Evaluation output.  Only reviewed runs are committed, each with a PROVENANCE.md.
+results/*
+!results/baseline/
+
+# OS
+.DS_Store

@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "intake-agent"
+version = "0.1.0"
+description = "A Claude agent that triages law-firm enquiries, checks conflicts through a tool, and routes every failure to a person."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Daniel Glynn-Roe" }]
+keywords = ["legal", "intake", "triage", "agent", "claude", "evaluation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+]
+# The agent needs the Anthropic SDK and pydantic.  Everything else is the standard library.
+dependencies = [
+    "anthropic>=1.11,<2",
+    "pydantic>=2.7,<3",
+]
+
+[project.optional-dependencies]
+# The optional demo endpoint and page.
+web = [
+    "fastapi>=0.115,<1",
+    "uvicorn>=0.30,<1",
+]
+# httpx2 is the SDK's own HTTP library.  The tests import it directly to mock the API.
+dev = [
+    "pytest>=8,<10",
+    "ruff>=0.16,<0.17",
+    "mypy>=2.4,<3",
+    "httpx2>=2.0,<3",
+]
+
+[project.scripts]
+intake-agent = "intake_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+intake_agent = ["data/*.toml", "data/*.json", "data/eval/*.jsonl", "data/eval/*.json", "static/*.html", "py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+mypy_path = "src"
+packages = ["intake_agent"]
+warn_unreachable = true
