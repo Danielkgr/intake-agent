@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+from datetime import date
 from enum import StrEnum
+from typing import Literal
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class PracticeArea(StrEnum):
@@ -45,3 +49,66 @@ class PartyKind(StrEnum):
     PERSON = "person"
     ORGANISATION = "organisation"
     UNKNOWN = "unknown"
+
+
+class EnquiryFields(BaseModel):
+    """Optional structured fields from a web form."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str | None = None
+    email: str | None = None
+    phone: str | None = None
+    organisation: str | None = None
+    stated_matter: str | None = None
+
+
+class Enquiry(BaseModel):
+    """One enquiry as received.  The text and fields are untrusted input from the public."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    enquiry_id: str = "enquiry"
+    channel: Literal["web_form", "email"] = "web_form"
+    received_date: date
+    fields: EnquiryFields = Field(default_factory=EnquiryFields)
+    text: str
+
+
+class Party(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    name: str = Field(description="The name exactly as the enquiry or form writes it.")
+    role: PartyRole
+    kind: PartyKind
+
+
+class SummaryStatement(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    statement: str = Field(description="One fact from the enquiry, in plain words, for a practitioner.")
+    source_quote: str = Field(
+        description="Words copied exactly from the enquiry or form fields that support the statement."
+    )
+
+
+class TriageDraft(BaseModel):
+    """The structured answer the triage step produces, before the code-enforced safety checks."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    matter_type: str = Field(
+        description="A short label, such as 'Unfair dismissal' or 'Purchase of a house'."
+    )
+    practice_area: PracticeArea
+    urgency: Urgency
+    urgency_reasons: list[str] = Field(description="The policy trigger and the fact behind it, one per item.")
+    parties: list[Party]
+    conflict_status: ConflictStatus = Field(description="The status check_conflicts returned.")
+    clarifying_questions: list[str] = Field(
+        max_length=3, description="At most three questions to the enquirer for required information."
+    )
+    practitioner_summary: list[SummaryStatement] = Field(min_length=1)
+    holding_reply: str = Field(description="The reply to the enquirer.  It never gives legal advice.")
+    routing: Routing
+    routing_reason: str
