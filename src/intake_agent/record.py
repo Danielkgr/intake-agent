@@ -103,9 +103,7 @@ class TriageRecord(BaseModel):
 def conflict_queries(enquiry: Enquiry, draft: TriageDraft | None) -> list[PartyQuery]:
     """Every name the code checks: draft parties, the form's enquirer, then extracted names."""
     queries = (
-        [PartyQuery(name=party.name, role=party.role, kind=party.kind) for party in draft.parties]
-        if draft
-        else []
+        [PartyQuery(name=party.name, role=party.role, kind=party.kind) for party in draft.parties] if draft else []
     )
     if enquiry.fields.name:
         queries.append(PartyQuery(name=enquiry.fields.name, role=PartyRole.ENQUIRER, kind=PartyKind.PERSON))
@@ -118,8 +116,7 @@ def conflict_queries(enquiry: Enquiry, draft: TriageDraft | None) -> list[PartyQ
         tokens = name_tokens(name)
         # A name that matches a party already listed is that party, with its known role.
         if any(
-            compare_names(tokens, other, "person") or compare_names(tokens, other, "organisation")
-            for other in known
+            compare_names(tokens, other, "person") or compare_names(tokens, other, "organisation") for other in known
         ):
             continue
         known.append(tokens)
@@ -143,10 +140,7 @@ def _final_conflict_check(
     ):
         # The triage step's own tool call flagged a name the final list no longer contains.
         flagged = [
-            party
-            for item in earlier
-            for party in item.parties
-            if party.outcome is PartyOutcome.POTENTIAL_CONFLICT
+            party for item in earlier for party in item.parties if party.outcome is PartyOutcome.POTENTIAL_CONFLICT
         ]
         return ConflictCheckResult(
             status=ConflictStatus.POTENTIAL_CONFLICT,
@@ -226,20 +220,12 @@ def assemble_record(
     else:
         reply, reply_source = review_reply(policy), "review_template"
 
-    reason = (
-        overrides[0] if overrides else (draft.routing_reason if draft else "No triage draft was produced.")
-    )
+    reason = overrides[0] if overrides else (draft.routing_reason if draft else "No triage draft was produced.")
     questions = (
-        []
-        if conflict.status is ConflictStatus.POTENTIAL_CONFLICT or draft is None
-        else draft.clarifying_questions
+        [] if conflict.status is ConflictStatus.POTENTIAL_CONFLICT or draft is None else draft.clarifying_questions
     )
     supported = (
-        [
-            s
-            for s in draft.practitioner_summary
-            if grounding is None or s.statement not in grounding.unsupported
-        ]
+        [s for s in draft.practitioner_summary if grounding is None or s.statement not in grounding.unsupported]
         if draft
         else []
     )

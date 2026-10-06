@@ -97,9 +97,7 @@ class TriageDraft(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    matter_type: str = Field(
-        description="A short label, such as 'Unfair dismissal' or 'Purchase of a house'."
-    )
+    matter_type: str = Field(description="A short label, such as 'Unfair dismissal' or 'Purchase of a house'.")
     practice_area: PracticeArea
     urgency: Urgency
     urgency_reasons: list[str] = Field(description="The policy trigger and the fact behind it, one per item.")

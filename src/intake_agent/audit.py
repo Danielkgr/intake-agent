@@ -42,8 +42,7 @@ class UsageSummary(BaseModel):
     cache_read_input_tokens: int = 0
     estimated_cost_usd: float | None = None
     cost_basis: str = (
-        "Estimated from the API's usage figures and published per-token prices.  "
-        "The invoice is the authority."
+        "Estimated from the API's usage figures and published per-token prices.  The invoice is the authority."
     )
 
 
