@@ -1,0 +1,10 @@
+{
+  "enquiry_id": "example-conflict",
+  "channel": "web_form",
+  "received_date": "2026-10-05",
+  "fields": {
+    "name": "Yusra Kettleby",
+    "email": "yusra.k@example.com"
+  },
+  "text": "I lease a shop in Seddon from Velloran Properties. They have locked me out for being one month behind on rent, and all my stock is inside. I need to get back in this week."
+}

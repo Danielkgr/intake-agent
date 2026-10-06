@@ -1,0 +1,35 @@
+{
+  "register_version": "2026-10-01",
+  "notice": "FICTIONAL.  Every person, business, and matter in this file is invented for testing.  Any resemblance to a real person or business is coincidental.",
+  "entities": [
+    {"entity_id": "E01", "name": "Tamberlane Foods Pty. Ltd.", "kind": "organisation"},
+    {"entity_id": "E02", "name": "ASHDOWN-PRYCE, Corin", "kind": "person"},
+    {"entity_id": "E03", "name": "Velloran Properties Pty Ltd", "kind": "organisation"},
+    {"entity_id": "E04", "name": "Petra A. Lindqvist", "kind": "person"},
+    {"entity_id": "E05", "name": "Soren Lindqvist", "kind": "person"},
+    {"entity_id": "E06", "name": "Corvid Analytics Pty Ltd", "kind": "organisation"},
+    {"entity_id": "E07", "name": "Brindlemoor Freight and Logistics Pty Ltd", "kind": "organisation", "aliases": ["Brindlemoor Freight"]},
+    {"entity_id": "E08", "name": "Halverson Joinery Pty Ltd", "kind": "organisation"},
+    {"entity_id": "E09", "name": "Ostrander Timber Supplies Pty Ltd", "kind": "organisation"},
+    {"entity_id": "E10", "name": "Marguerite Okonkwo-Bell", "kind": "person"},
+    {"entity_id": "E11", "name": "Arthur Pemberton-Hale", "kind": "person"},
+    {"entity_id": "E12", "name": "Ilse Varga-Thornbury", "kind": "person"},
+    {"entity_id": "E13", "name": "Kestrel Ridge Mining Ltd", "kind": "organisation"},
+    {"entity_id": "E14", "name": "Dunmore Agistment Co", "kind": "organisation"},
+    {"entity_id": "E15", "name": "Fenwick Oyelaran", "kind": "person"},
+    {"entity_id": "E16", "name": "Rosalind Achterberg", "kind": "person"}
+  ],
+  "matters": [
+    {"matter_id": "M-2024-117", "status": "open", "practice_area": "commercial_disputes", "client_ids": ["E01"], "related_party_ids": ["E12"]},
+    {"matter_id": "M-2025-031", "status": "open", "practice_area": "family", "client_ids": ["E02"], "adverse_party_ids": ["E16"]},
+    {"matter_id": "M-2023-208", "status": "open", "practice_area": "property_conveyancing", "client_ids": ["E03"]},
+    {"matter_id": "M-2026-044", "status": "open", "practice_area": "wills_estates", "client_ids": ["E05"], "adverse_party_ids": ["E04"]},
+    {"matter_id": "M-2021-090", "status": "closed", "practice_area": "commercial_disputes", "client_ids": ["E06"]},
+    {"matter_id": "M-2025-162", "status": "open", "practice_area": "employment", "client_ids": ["E07"]},
+    {"matter_id": "M-2026-019", "status": "open", "practice_area": "commercial_disputes", "client_ids": ["E09"], "adverse_party_ids": ["E08"]},
+    {"matter_id": "M-2022-075", "status": "closed", "practice_area": "wills_estates", "client_ids": ["E10"]},
+    {"matter_id": "M-2025-201", "status": "open", "practice_area": "property_conveyancing", "client_ids": ["E11"]},
+    {"matter_id": "M-2025-088", "status": "open", "practice_area": "commercial_disputes", "client_ids": ["E14"], "adverse_party_ids": ["E13"]},
+    {"matter_id": "M-2026-102", "status": "open", "practice_area": "criminal", "client_ids": ["E15"]}
+  ]
+}
