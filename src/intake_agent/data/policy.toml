@@ -11,7 +11,7 @@ fictional = true
 policy_version = "2026-10-01"
 location = "Melbourne, Victoria"
 standard_response = "within one business day"
-urgent_response = "the same business day"
+urgent_response = "on the same business day"
 
 [general]
 rules = [
