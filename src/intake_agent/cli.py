@@ -15,6 +15,7 @@ from typing import cast, get_args
 from intake_agent import __version__
 from intake_agent.agent import DEFAULT_MODEL, AgentSettings, ClaudeTriageAgent, Effort
 from intake_agent.baseline import RulesBaseline
+from intake_agent.estimate import render_estimate
 from intake_agent.evaluation import load_cases, provenance, run_cases, score, write_results
 from intake_agent.schema import Enquiry, EnquiryFields
 
@@ -102,6 +103,8 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--out", type=Path, help="Output directory (default results/<arm>)")
     evaluate.add_argument("--limit", type=int, help="Evaluate only the first N enquiries")
     _add_model_options(evaluate)
+
+    commands.add_parser("estimate-cost", help="Estimate the Claude arm's cost per enquiry from prompt sizes")
     return parser
 
 
@@ -159,6 +162,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         return run_triage(args)
     if args.command == "eval":
         return run_eval(args, arguments)
+    if args.command == "estimate-cost":
+        print(render_estimate())
+        return 0
     raise AssertionError(f"Unhandled command {args.command}")
 
 
