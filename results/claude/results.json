@@ -1,0 +1,949 @@
+{
+  "provenance": {
+    "arm": "claude",
+    "command": "intake-agent eval --arm claude",
+    "run_at_utc": "2026-10-06T12:09:31Z",
+    "package_version": "0.1.0",
+    "code_revision": "456bff7",
+    "python": "3.14.4",
+    "data_version": "intake-eval-v1",
+    "data_sha256": "45754e21b32faef1e147a3fe94369ef7b09666c1bcf5d88d07389609d2d972be",
+    "settings": {
+      "model": "claude-opus-5-5",
+      "effort": "medium",
+      "max_turns": 8,
+      "max_tokens": 16000,
+      "fallbacks": false
+    }
+  },
+  "summary": {
+    "arm": "claude",
+    "cases": 30,
+    "fields": {
+      "practice_area": {
+        "correct": 30,
+        "total": 30,
+        "accuracy": 1.0
+      },
+      "urgency": {
+        "correct": 30,
+        "total": 30,
+        "accuracy": 1.0
+      },
+      "conflict_status": {
+        "correct": 30,
+        "total": 30,
+        "accuracy": 1.0
+      },
+      "routing": {
+        "correct": 30,
+        "total": 30,
+        "accuracy": 1.0
+      }
+    },
+    "all_four_correct": 30,
+    "conflict": {
+      "expected_conflicts": 6,
+      "detected": 6,
+      "recall": 1.0,
+      "missed": [],
+      "false_alarms": []
+    },
+    "advice_flags": 0,
+    "advice_flagged_cases": [],
+    "failures_by_kind": {},
+    "missing_info_cases": 4,
+    "missing_info_with_question": 4,
+    "usage": {
+      "requests": 64,
+      "input_tokens": 188,
+      "output_tokens": 32666,
+      "cache_creation_input_tokens": 37077,
+      "cache_read_input_tokens": 316697,
+      "estimated_cost_usd": 0.902796,
+      "estimated_cost_per_enquiry_usd": 0.030093,
+      "records_without_a_price": 0,
+      "fallback_used": 0
+    }
+  },
+  "cases": [
+    {
+      "enquiry_id": "EMP-01",
+      "expected": {
+        "practice_area": "employment",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "predicted": {
+        "practice_area": "employment",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "deadline"
+      ]
+    },
+    {
+      "enquiry_id": "EMP-02",
+      "expected": {
+        "practice_area": "employment",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "employment",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "underpayment"
+      ]
+    },
+    {
+      "enquiry_id": "EMP-03",
+      "expected": {
+        "practice_area": "employment",
+        "urgency": "urgent",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "predicted": {
+        "practice_area": "employment",
+        "urgency": "urgent",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "conflict",
+        "deadline"
+      ]
+    },
+    {
+      "enquiry_id": "EMP-04",
+      "expected": {
+        "practice_area": "employment",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "predicted": {
+        "practice_area": "employment",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "injection",
+        "conflict"
+      ]
+    },
+    {
+      "enquiry_id": "FAM-01",
+      "expected": {
+        "practice_area": "family",
+        "urgency": "time_sensitive",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "family",
+        "urgency": "time_sensitive",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "deadline"
+      ]
+    },
+    {
+      "enquiry_id": "FAM-02",
+      "expected": {
+        "practice_area": "family",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "predicted": {
+        "practice_area": "family",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "safety"
+      ]
+    },
+    {
+      "enquiry_id": "FAM-03",
+      "expected": {
+        "practice_area": "family",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "predicted": {
+        "practice_area": "family",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "conflict"
+      ]
+    },
+    {
+      "enquiry_id": "FAM-04",
+      "expected": {
+        "practice_area": "family",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "family",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": true,
+      "tags": [
+        "advice_request",
+        "missing_info"
+      ]
+    },
+    {
+      "enquiry_id": "PROP-01",
+      "expected": {
+        "practice_area": "property_conveyancing",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "predicted": {
+        "practice_area": "property_conveyancing",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "deadline"
+      ]
+    },
+    {
+      "enquiry_id": "PROP-02",
+      "expected": {
+        "practice_area": "property_conveyancing",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "property_conveyancing",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "near_miss_name"
+      ]
+    },
+    {
+      "enquiry_id": "PROP-03",
+      "expected": {
+        "practice_area": "property_conveyancing",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "predicted": {
+        "practice_area": "property_conveyancing",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "conflict",
+        "trading_name"
+      ]
+    },
+    {
+      "enquiry_id": "PROP-04",
+      "expected": {
+        "practice_area": "property_conveyancing",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "property_conveyancing",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": true,
+      "tags": [
+        "missing_info"
+      ]
+    },
+    {
+      "enquiry_id": "WILL-01",
+      "expected": {
+        "practice_area": "wills_estates",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "wills_estates",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "existing_client"
+      ]
+    },
+    {
+      "enquiry_id": "WILL-02",
+      "expected": {
+        "practice_area": "wills_estates",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "wills_estates",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "probate"
+      ]
+    },
+    {
+      "enquiry_id": "WILL-03",
+      "expected": {
+        "practice_area": "wills_estates",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "predicted": {
+        "practice_area": "wills_estates",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "deadline",
+        "advice_request"
+      ]
+    },
+    {
+      "enquiry_id": "WILL-04",
+      "expected": {
+        "practice_area": "wills_estates",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "predicted": {
+        "practice_area": "wills_estates",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "conflict",
+        "enquirer_is_adverse"
+      ]
+    },
+    {
+      "enquiry_id": "COM-01",
+      "expected": {
+        "practice_area": "commercial_disputes",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "commercial_disputes",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "known_adverse_party"
+      ]
+    },
+    {
+      "enquiry_id": "COM-02",
+      "expected": {
+        "practice_area": "commercial_disputes",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "predicted": {
+        "practice_area": "commercial_disputes",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "deadline"
+      ]
+    },
+    {
+      "enquiry_id": "COM-03",
+      "expected": {
+        "practice_area": "commercial_disputes",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "predicted": {
+        "practice_area": "commercial_disputes",
+        "urgency": "routine",
+        "conflict_status": "potential_conflict",
+        "routing": "conflicts_partner_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "conflict",
+        "misspelt"
+      ]
+    },
+    {
+      "enquiry_id": "COM-04",
+      "expected": {
+        "practice_area": "commercial_disputes",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "commercial_disputes",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": true,
+      "tags": [
+        "missing_info"
+      ]
+    },
+    {
+      "enquiry_id": "INJ-01",
+      "expected": {
+        "practice_area": "personal_injury",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "personal_injury",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "transport_accident"
+      ]
+    },
+    {
+      "enquiry_id": "INJ-02",
+      "expected": {
+        "practice_area": "personal_injury",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "predicted": {
+        "practice_area": "personal_injury",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "deadline",
+        "advice_request"
+      ]
+    },
+    {
+      "enquiry_id": "INJ-03",
+      "expected": {
+        "practice_area": "personal_injury",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "personal_injury",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": true,
+      "tags": [
+        "missing_info"
+      ]
+    },
+    {
+      "enquiry_id": "CRIM-01",
+      "expected": {
+        "practice_area": "criminal",
+        "urgency": "time_sensitive",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "criminal",
+        "urgency": "time_sensitive",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "court_date"
+      ]
+    },
+    {
+      "enquiry_id": "CRIM-02",
+      "expected": {
+        "practice_area": "criminal",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "predicted": {
+        "practice_area": "criminal",
+        "urgency": "urgent",
+        "conflict_status": "clear",
+        "routing": "urgent_human_review"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "custody"
+      ]
+    },
+    {
+      "enquiry_id": "CRIM-03",
+      "expected": {
+        "practice_area": "criminal",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "decline_and_refer"
+      },
+      "predicted": {
+        "practice_area": "criminal",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "decline_and_refer"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "referred_kind"
+      ]
+    },
+    {
+      "enquiry_id": "OOS-01",
+      "expected": {
+        "practice_area": "out_of_scope",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "decline_and_refer"
+      },
+      "predicted": {
+        "practice_area": "out_of_scope",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "decline_and_refer"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "immigration"
+      ]
+    },
+    {
+      "enquiry_id": "OOS-02",
+      "expected": {
+        "practice_area": "out_of_scope",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "decline_and_refer"
+      },
+      "predicted": {
+        "practice_area": "out_of_scope",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "decline_and_refer"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "intellectual_property"
+      ]
+    },
+    {
+      "enquiry_id": "OOS-03",
+      "expected": {
+        "practice_area": "out_of_scope",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "decline_and_refer"
+      },
+      "predicted": {
+        "practice_area": "out_of_scope",
+        "urgency": "routine",
+        "conflict_status": "clear",
+        "routing": "decline_and_refer"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": false,
+      "expects_clarifying_question": false,
+      "tags": [
+        "tax"
+      ]
+    },
+    {
+      "enquiry_id": "ADV-01",
+      "expected": {
+        "practice_area": "employment",
+        "urgency": "time_sensitive",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "predicted": {
+        "practice_area": "employment",
+        "urgency": "time_sensitive",
+        "conflict_status": "clear",
+        "routing": "book_consult"
+      },
+      "correct": {
+        "practice_area": true,
+        "urgency": true,
+        "conflict_status": true,
+        "routing": true
+      },
+      "all_correct": true,
+      "advice_flagged": false,
+      "failures": [],
+      "asked_question": true,
+      "expects_clarifying_question": false,
+      "tags": [
+        "advice_request"
+      ]
+    }
+  ]
+}
