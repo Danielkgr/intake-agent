@@ -118,10 +118,7 @@ def _within_one_edit(a: str, b: str) -> bool:
         if len(diffs) == 1:
             return True
         return (
-            len(diffs) == 2
-            and diffs[1] == diffs[0] + 1
-            and a[diffs[0]] == b[diffs[1]]
-            and a[diffs[1]] == b[diffs[0]]
+            len(diffs) == 2 and diffs[1] == diffs[0] + 1 and a[diffs[0]] == b[diffs[1]] and a[diffs[1]] == b[diffs[0]]
         )
     shorter, longer = (a, b) if len(a) < len(b) else (b, a)
     return any(longer[:i] + longer[i + 1 :] == shorter for i in range(len(longer)))
@@ -171,10 +168,7 @@ def compare_names(
         if (
             not q_mid
             or not c_mid
-            or (
-                len(q_mid) == len(c_mid)
-                and all(_same_or_initial(a, b) for a, b in zip(q_mid, c_mid, strict=True))
-            )
+            or (len(q_mid) == len(c_mid) and all(_same_or_initial(a, b) for a, b in zip(q_mid, c_mid, strict=True)))
         ):
             return MatchType.INITIALS
 
@@ -248,11 +242,7 @@ class RegisterUnavailableError(RuntimeError):
 
 def _load_register_json(path: Path | None) -> dict[str, Any]:
     if path is None:
-        text = (
-            resources.files("intake_agent")
-            .joinpath("data/conflict_register.json")
-            .read_text(encoding="utf-8")
-        )
+        text = resources.files("intake_agent").joinpath("data/conflict_register.json").read_text(encoding="utf-8")
     else:
         text = path.read_text(encoding="utf-8")
     data: dict[str, Any] = json.loads(text)

@@ -114,9 +114,7 @@ def test_tool_error_is_returned_with_is_error_and_recorded() -> None:
 
 
 def test_refusal_is_a_recorded_failure_not_an_exception() -> None:
-    refusal = api_message(
-        [], "refusal", stop_details={"type": "refusal", "category": "cyber", "explanation": None}
-    )
+    refusal = api_message([], "refusal", stop_details={"type": "refusal", "category": "cyber", "explanation": None})
     run = _agent(ScriptedAPI(refusal)).run(ENQUIRY)
     assert run.draft is None
     assert [failure.kind for failure in run.failures] == ["refusal"]
@@ -133,9 +131,7 @@ def test_max_tokens_never_runs_a_cut_off_tool_call() -> None:
 
 
 def test_output_that_is_not_json_is_invalid() -> None:
-    run = _agent(ScriptedAPI(api_message([text_block("Here is my triage: urgent.")], "end_turn"))).run(
-        ENQUIRY
-    )
+    run = _agent(ScriptedAPI(api_message([text_block("Here is my triage: urgent.")], "end_turn"))).run(ENQUIRY)
     assert run.draft is None
     assert [failure.kind for failure in run.failures] == ["invalid_output"]
 

@@ -130,9 +130,7 @@ class ScriptedAPI:
         self.requests.append(json.loads(request.content))
         self.headers.append(dict(request.headers))
         if not self.responses:
-            return httpx2.Response(
-                500, json={"type": "error", "error": {"type": "api_error", "message": "done"}}
-            )
+            return httpx2.Response(500, json={"type": "error", "error": {"type": "api_error", "message": "done"}})
         item = self.responses.pop(0)
         if isinstance(item, tuple):
             status, body = item
@@ -141,9 +139,7 @@ class ScriptedAPI:
 
     def client(self) -> anthropic.Anthropic:
         transport = httpx2.MockTransport(self.handler)
-        return anthropic.Anthropic(
-            api_key="test", max_retries=0, http_client=httpx2.Client(transport=transport)
-        )
+        return anthropic.Anthropic(api_key="test", max_retries=0, http_client=httpx2.Client(transport=transport))
 
     def tool_results(self, request_index: int) -> list[dict[str, Any]]:
         """The tool_result blocks sent in the last user message of a request."""

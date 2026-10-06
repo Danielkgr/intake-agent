@@ -24,9 +24,7 @@ def test_triage_prints_a_record_from_a_text_enquiry(
     path = tmp_path / "enquiry.txt"
     path.write_text(ENQUIRY.text, encoding="utf-8")
 
-    code = main(
-        ["triage", str(path), "--received-date", "2026-09-29", "--name", "Nadia Ferreira-Holt", "--no-audit"]
-    )
+    code = main(["triage", str(path), "--received-date", "2026-09-29", "--name", "Nadia Ferreira-Holt", "--no-audit"])
 
     record = json.loads(capsys.readouterr().out)
     assert code == 0

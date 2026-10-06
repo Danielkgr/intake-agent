@@ -49,9 +49,7 @@ def test_the_firms_own_templates_pass_the_advice_check() -> None:
 
 def test_grounding_accepts_exact_quotes_despite_quote_marks_and_spacing() -> None:
     source = "My boss said \u2018you\u2019re finished\u2019   on Friday."
-    statements = [
-        SummaryStatement(statement="Told he was finished.", source_quote="said 'you're finished' on Friday")
-    ]
+    statements = [SummaryStatement(statement="Told he was finished.", source_quote="said 'you're finished' on Friday")]
     assert check_grounding(statements, [source]).passed
 
 

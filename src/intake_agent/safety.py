@@ -69,17 +69,13 @@ class AdviceCheck(BaseModel):
 def check_advice(text: str) -> AdviceCheck:
     """Scan a holding reply for language that gives or resembles legal advice."""
     matches = [
-        f"{label}: {m.group(0).strip()!r}"
-        for label, pattern in _ADVICE_PATTERNS
-        for m in pattern.finditer(text)
+        f"{label}: {m.group(0).strip()!r}" for label, pattern in _ADVICE_PATTERNS for m in pattern.finditer(text)
     ]
     matches += [f"names legislation: {m.group(0)!r}" for m in _ACT_NAME.finditer(text)]
     return AdviceCheck(flagged=bool(matches), matches=matches, checked_text=text)
 
 
-_QUOTE_CHARS = str.maketrans(
-    {"\u2018": "'", "\u2019": "'", "\u201c": '"', "\u201d": '"', "\u2013": "-", "\u2014": "-"}
-)
+_QUOTE_CHARS = str.maketrans({"\u2018": "'", "\u2019": "'", "\u201c": '"', "\u201d": '"', "\u2013": "-", "\u2014": "-"})
 
 
 def _comparable(text: str) -> str:

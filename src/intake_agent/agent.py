@@ -92,16 +92,12 @@ def summarise_usage(counts: list[TokenCounts], requests: int) -> UsageSummary:
         output_tokens=sum(item.output_tokens for item in counts),
         cache_creation_input_tokens=sum(item.cache_creation_input_tokens for item in counts),
         cache_read_input_tokens=sum(item.cache_read_input_tokens for item in counts),
-        estimated_cost_usd=None
-        if any(cost is None for cost in costs)
-        else round(sum(cast(list[float], costs)), 6),
+        estimated_cost_usd=None if any(cost is None for cost in costs) else round(sum(cast(list[float], costs)), 6),
     )
 
 
 def _validation_summary(error: pydantic.ValidationError) -> str:
-    problems = [
-        f"{'.'.join(str(part) for part in item['loc']) or 'output'}: {item['msg']}" for item in error.errors()
-    ]
+    problems = [f"{'.'.join(str(part) for part in item['loc']) or 'output'}: {item['msg']}" for item in error.errors()]
     return "The final output did not match the triage schema: " + "; ".join(problems[:5])
 
 
@@ -163,9 +159,7 @@ class ClaudeTriageAgent:
                 last = message
                 counts.extend(_token_counts(message))
                 answered_by.append(str(message.model))
-                served_by_fallback = any(
-                    item.type == "fallback_message" for item in message.usage.iterations or []
-                )
+                served_by_fallback = any(item.type == "fallback_message" for item in message.usage.iterations or [])
                 fallback_used = fallback_used or served_by_fallback
                 tool_names: dict[str, str] = {}
                 turn_data: dict[str, Any] = {
@@ -212,9 +206,7 @@ class ClaudeTriageAgent:
                     if is_error:
                         failures.append(Failure(kind="tool_error", detail=f"{name}: {item.get('content')}"))
         except anthropic.RateLimitError as exc:
-            failures.append(
-                Failure(kind="api_error", detail=f"Rate limited after the SDK's retries: {exc.message}")
-            )
+            failures.append(Failure(kind="api_error", detail=f"Rate limited after the SDK's retries: {exc.message}"))
         except anthropic.APIStatusError as exc:
             failures.append(Failure(kind="api_error", detail=f"HTTP {exc.status_code}: {exc.message}"))
         except anthropic.APIConnectionError as exc:
@@ -269,18 +261,12 @@ class ClaudeTriageAgent:
                 return None
         if stop == "refusal":
             category = last.stop_details.category if last.stop_details is not None else None
-            failures.append(
-                Failure(kind="refusal", detail=f"The model declined to answer (category: {category}).")
-            )
+            failures.append(Failure(kind="refusal", detail=f"The model declined to answer (category: {category})."))
         elif stop == "max_tokens":
-            failures.append(
-                Failure(kind="max_tokens", detail="The reply hit max_tokens, so the output is incomplete.")
-            )
+            failures.append(Failure(kind="max_tokens", detail="The reply hit max_tokens, so the output is incomplete."))
         elif stop == "tool_use":
             failures.append(
-                Failure(
-                    kind="turn_cap", detail=f"The run reached its cap of {self.settings.max_turns} turns."
-                )
+                Failure(kind="turn_cap", detail=f"The run reached its cap of {self.settings.max_turns} turns.")
             )
         else:
             failures.append(Failure(kind="unexpected_stop", detail=f"The reply stopped with {stop!r}."))

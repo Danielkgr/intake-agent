@@ -109,9 +109,7 @@ class ToolContext:
         try:
             result = self.checker.check(parties)
         except RegisterUnavailableError as exc:
-            raise ToolError(
-                "The conflict register is unavailable, so the conflict check did not run."
-            ) from exc
+            raise ToolError("The conflict register is unavailable, so the conflict check did not run.") from exc
         self.conflict_results.append(result)
         return json.dumps(result.for_model())
 

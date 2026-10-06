@@ -126,10 +126,7 @@ def test_related_party_such_as_a_director_is_a_potential_conflict(checker: Confl
 
 def test_no_names_means_not_checked(checker: ConflictChecker) -> None:
     assert checker.check([]).status is ConflictStatus.NOT_CHECKED
-    assert (
-        checker.check([PartyQuery(name=" - ", role=PartyRole.OTHER_PARTY)]).status
-        is ConflictStatus.NOT_CHECKED
-    )
+    assert checker.check([PartyQuery(name=" - ", role=PartyRole.OTHER_PARTY)]).status is ConflictStatus.NOT_CHECKED
 
 
 def test_model_view_withholds_matter_details(checker: ConflictChecker) -> None:
@@ -158,9 +155,7 @@ def test_register_rejects_a_matter_that_names_an_unknown_entity(tmp_path: Path) 
             {
                 "register_version": "test",
                 "entities": [],
-                "matters": [
-                    {"matter_id": "M-1", "status": "open", "practice_area": "family", "client_ids": ["E99"]}
-                ],
+                "matters": [{"matter_id": "M-1", "status": "open", "practice_area": "family", "client_ids": ["E99"]}],
             }
         )
     )

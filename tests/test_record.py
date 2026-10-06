@@ -50,9 +50,7 @@ def test_conflict_routes_to_the_conflicts_partner_even_when_the_model_says_other
         {"name": "Nadia Ferreira-Holt", "role": "enquirer", "kind": "person"},
         {"name": "Tamberlane Foods", "role": "opposing_party", "kind": "organisation"},
     ]
-    summary = [
-        {"statement": "Dismissed on 24 September 2026.", "source_quote": "dismissed me on 24 September 2026"}
-    ]
+    summary = [{"statement": "Dismissed on 24 September 2026.", "source_quote": "dismissed me on 24 September 2026"}]
     api = ScriptedAPI(
         tool_turn(tool_use("toolu_1", "check_conflicts", {"parties": parties})),
         # The model ignores the tool's finding: it reports clear and books a consult.
@@ -78,9 +76,7 @@ def test_conflict_routes_to_the_conflicts_partner_even_when_the_model_says_other
 
 
 def test_conflict_is_caught_even_when_the_draft_leaves_the_party_out() -> None:
-    summary = [
-        {"statement": "Dismissed on 24 September 2026.", "source_quote": "dismissed me on 24 September 2026"}
-    ]
+    summary = [{"statement": "Dismissed on 24 September 2026.", "source_quote": "dismissed me on 24 September 2026"}]
     record = _assemble(
         enquiry=CONFLICT_ENQUIRY,
         parties=[{"name": "Nadia Ferreira-Holt", "role": "enquirer", "kind": "person"}],
@@ -91,9 +87,7 @@ def test_conflict_is_caught_even_when_the_draft_leaves_the_party_out() -> None:
 
 
 def test_refusal_routes_to_urgent_human_review_with_a_neutral_reply() -> None:
-    refusal = api_message(
-        [], "refusal", stop_details={"type": "refusal", "category": None, "explanation": None}
-    )
+    refusal = api_message([], "refusal", stop_details={"type": "refusal", "category": None, "explanation": None})
     record = ClaudeTriageAgent(client=ScriptedAPI(refusal).client()).triage(ENQUIRY)
     assert record.routing.decision is Routing.URGENT_HUMAN_REVIEW
     assert record.practice_area is None
