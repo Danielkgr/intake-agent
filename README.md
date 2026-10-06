@@ -4,7 +4,7 @@
 
 ### A Claude agent that triages law-firm enquiries, checks conflicts through a tool, and sends every doubtful case to a person
 
-![CI](https://img.shields.io/github/actions/workflow/status/Danielkgr/intake-agent/ci.yml?branch=main&style=for-the-badge&label=CI) ![30 synthetic enquiries](https://img.shields.io/badge/eval-30_synthetic_enquiries-0969da?style=for-the-badge) ![Claude arm not yet run](https://img.shields.io/badge/Claude_arm-not_yet_run-9a6700?style=for-the-badge) ![runs offline on the baseline](https://img.shields.io/badge/baseline-runs_offline-8250df?style=for-the-badge) ![MIT licence](https://img.shields.io/badge/licence-MIT-57606a?style=for-the-badge)
+![CI](https://img.shields.io/github/actions/workflow/status/Danielkgr/intake-agent/ci.yml?branch=main&style=for-the-badge&label=CI) ![30 synthetic enquiries](https://img.shields.io/badge/eval-30_synthetic_enquiries-0969da?style=for-the-badge) ![Claude arm measured on the live API](https://img.shields.io/badge/Claude_arm-measured_live-1a7f37?style=for-the-badge) ![runs offline on the baseline](https://img.shields.io/badge/baseline-runs_offline-8250df?style=for-the-badge) ![MIT licence](https://img.shields.io/badge/licence-MIT-57606a?style=for-the-badge)
 
 </div>
 
@@ -33,7 +33,7 @@ It reads a new enquiry, from a web form or an email, and produces a triage recor
 > [!CAUTION]
 > This is a working prototype and gives no legal advice.  Every enquiry, person, business, and matter in it is invented, and so are the firm, Quollridge Lawyers, and its intake policy.  It has never been deployed and has never seen real client data.  The policy names some statutory time limits, checked against public sources in October 2026, but nothing here should be relied on for a real matter.
 
-It is a working prototype.  The rules baseline runs offline and has been evaluated.  The Claude arm is built and tested against a mocked API, but **has not yet been run against the real API**, because the build environment had no API key.
+It is a working prototype.  The rules baseline runs offline and has been evaluated.  The Claude arm is tested against a mocked API and has been **run once against the live API**, on 6 October 2026, for $0.90.
 
 <br>
 
@@ -41,19 +41,21 @@ It is a working prototype.  The rules baseline runs offline and has been evaluat
 
 | Measure | Rules baseline | Claude arm |
 |---|:--:|:--:|
-| Practice area, exact match | 30 / 30 | not yet run |
-| Urgency, exact match | 30 / 30 | not yet run |
-| Conflict status, exact match | 30 / 30 | not yet run |
-| Routing, exact match | 30 / 30 | not yet run |
-| All four fields correct | 30 / 30 | not yet run |
-| Conflict recall | 6 / 6 | not yet run |
-| Holding replies flagged by the advice check | 0 | not yet run |
-| Missing-information cases with a clarifying question | 4 / 4 | not yet run |
+| Practice area, exact match | 30 / 30 | 30 / 30 |
+| Urgency, exact match | 30 / 30 | 30 / 30 |
+| Conflict status, exact match | 30 / 30 | 30 / 30 |
+| Routing, exact match | 30 / 30 | 30 / 30 |
+| All four fields correct | 30 / 30 | 30 / 30 |
+| Conflict recall | 6 / 6 | 6 / 6 |
+| Holding replies flagged by the advice check | 0 | 0 |
+| Missing-information cases with a clarifying question | 4 / 4 | 4 / 4 |
 
-The baseline figures come from one run on 6 October 2026.  [results/baseline/PROVENANCE.md](results/baseline/PROVENANCE.md) records the command, the code revision, and the data version and hash, and the records and per-case scores sit beside it.
+Each column comes from one run on 6 October 2026, the Claude arm with `claude-opus-5-5` at `medium` effort against the live API.  [results/baseline/PROVENANCE.md](results/baseline/PROVENANCE.md) and [results/claude/PROVENANCE.md](results/claude/PROVENANCE.md) record the command, the code revision, and the data version and hash, and the records and per-case scores sit beside them.  Every Claude record also carries its audit trail of model turns, tool calls, and tool results.
 
 > [!IMPORTANT]
 > A perfect baseline score is not evidence that keyword rules can triage legal enquiries.  The same person wrote the 30 enquiries, their labels, and the rules, and wrote the rules with the enquiries in view.  The score shows that the set is easy for someone who knows it.  The second example under [Running it](#running-it) shows the gap: the rules call a locked-out tenant who needs "to get back in this week" routine, because no rule covers that phrase and no enquiry in the set uses it.  The baseline is an optimistic reference, not a fair competitor.
+>
+> The Claude arm's perfect score has the same limit.  Both arms score 30 of 30, so the set cannot tell them apart, and neither result says how either would do on real enquiries.  In both arms the conflict status and the conflict route are set by the tool and the code re-check, so those rows test that code at least as much as the model.  What the Claude run does show is the agent working end to end on the live API, with no failures, no advice flags, and no ungrounded summary statements, at a measured cost.
 
 ### The Claude arm
 
@@ -63,14 +65,20 @@ ANTHROPIC_API_KEY=... intake-agent eval --arm claude
 
 That command triages all 30 enquiries with `claude-opus-5-5` at `medium` effort, one at a time so each request can read the cached prefix, and writes `results/claude/` in the same shape as the baseline.  Server-side fallbacks are off in the evaluation, so a refusal is recorded as a refusal instead of being answered by a different model.
 
-The cost below is an **estimate**, not a measurement.  `intake-agent estimate-cost` measures the prompt from the code.  The cached prefix of tool definitions, system prompt, policy summary, and output schema comes to 11,688 characters, the average enquiry to 424, and the tool results to 1,238 per tool turn.  It then assumes 3 characters per token and the turns and output lengths shown.
+The cost below is **measured**.  It is summed from the `usage` block the API returned for each of the run's requests, and priced at the list prices for Claude Opus 5.5 in [pricing.py](src/intake_agent/pricing.py), which are $4 per million input tokens, $20 per million output tokens, $0.20 per million for cache reads, and $5 per million for five-minute cache writes.  The invoice is the authority.
 
-| Scenario | Requests | Output tokens per tool turn | Output tokens, final turn | Per enquiry, warm cache | Per enquiry, no cache |
-|---|:--:|:--:|:--:|:--:|:--:|
-| Typical | 3 | 500 | 1,500 | $0.064 | $0.111 |
-| Heavy | 4 | 1,000 | 3,000 | $0.148 | $0.222 |
+| Measure | All 30 enquiries | Per enquiry |
+|---|:--:|:--:|
+| Requests | 64 | 2.1 |
+| Cache read tokens | 316,697 | 10,557 |
+| Cache write tokens | 37,077 | 1,236 |
+| Uncached input tokens | 188 | 6 |
+| Output tokens | 32,666 | 1,089 |
+| Cost | $0.9028 | $0.0301 |
 
-The prices are those for Claude Opus 5.5: $4 per million input tokens, $20 per million output tokens, $0.20 per million for cache reads, and $5 per million for five-minute cache writes.  Output dominates, and the output lengths are guesses, so the real figure could sit outside this range.  A first enquiry with a cold cache costs about two cents more, for writing the prefix.  On these figures the 30-enquiry evaluation would cost roughly $2 to $7.  Every Claude record reports its own tokens, cache reads, and estimated cost from the API's `usage` fields, so the first real run will replace this table with measured numbers.  No caching saving is claimed until then.
+The cached prefix did its job.  At the same prices the same tokens with no caching would have cost about $2.07, so caching cut the cost of the run by about 56%.  Output was 72% of what the run cost.
+
+Before the run, `intake-agent estimate-cost` put the evaluation at roughly $2 to $7.  It measures the prompt from the code and then guesses the number of turns and the output lengths, and the model needed fewer turns and wrote less than it assumed.  It still prints that estimate, for a first look at a changed prompt or policy before any paid run.
 
 <br>
 
@@ -220,6 +228,8 @@ src/intake_agent/
 
 examples/          Two fictional enquiries for the quick start
 results/baseline/  The baseline's evaluation run, with PROVENANCE.md
+results/claude/    The Claude arm's evaluation run on the live API, with PROVENANCE.md
+eval-logs/         The console output of the Claude run and of the estimate before it
 tests/             Tests with a mocked Messages API
 ```
 
