@@ -339,8 +339,8 @@ class ConflictCheckResult(BaseModel):
     def for_model(self) -> dict[str, Any]:
         """The result as the model sees it.
 
-        Matter numbers and other clients' roles stay out of the model's context.  The model
-        needs only the outcome for each name.
+        The model learns only whether each name raises a potential conflict.  Matter numbers,
+        and whether a name belongs to a client or an adverse party, stay out of its context.
         """
         return {
             "status": self.status.value,
@@ -348,8 +348,9 @@ class ConflictCheckResult(BaseModel):
                 {
                     "name": party.name,
                     "role": party.role.value,
-                    "outcome": party.outcome.value,
-                    "match_types": sorted({match.match_type.value for match in party.matches}),
+                    "outcome": "potential_conflict"
+                    if party.outcome is PartyOutcome.POTENTIAL_CONFLICT
+                    else "no_conflict",
                 }
                 for party in self.parties
             ],

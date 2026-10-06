@@ -129,11 +129,19 @@ def test_no_names_means_not_checked(checker: ConflictChecker) -> None:
     assert checker.check([PartyQuery(name=" - ", role=PartyRole.OTHER_PARTY)]).status is ConflictStatus.NOT_CHECKED
 
 
-def test_model_view_withholds_matter_details(checker: ConflictChecker) -> None:
-    view = checker.check([PartyQuery(name="Tamberlane Foods", role=PartyRole.OPPOSING_PARTY)]).for_model()
+def test_model_view_withholds_matter_details_and_register_roles(checker: ConflictChecker) -> None:
+    view = checker.check(
+        [
+            PartyQuery(name="Marguerite Okonkwo-Bell", role=PartyRole.ENQUIRER),
+            PartyQuery(name="Tamberlane Foods", role=PartyRole.OPPOSING_PARTY),
+            PartyQuery(name="Halverson Joinery", role=PartyRole.OTHER_PARTY),
+        ]
+    ).for_model()
     text = json.dumps(view)
     assert view["status"] == "potential_conflict"
+    assert [party["outcome"] for party in view["parties"]] == ["no_conflict", "potential_conflict", "no_conflict"]
     assert "M-2024-117" not in text
+    assert "adverse" not in text
     assert "client" not in text.replace("conflicts_partner_review", "")
 
 
