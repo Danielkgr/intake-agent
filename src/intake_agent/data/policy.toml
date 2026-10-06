@@ -1,0 +1,124 @@
+# Intake policy for Quollridge Lawyers.
+#
+# FICTIONAL.  Quollridge Lawyers is an invented firm and this is not any real firm's policy.
+# It exists to exercise the intake agent and its evaluation.  It is not legal advice.
+# The statutory time limits named below were checked against public sources in October 2026.
+# A practitioner must still confirm any limit, and any exception to it, before relying on it.
+
+[firm]
+name = "Quollridge Lawyers"
+fictional = true
+policy_version = "2026-10-01"
+location = "Melbourne, Victoria"
+standard_response = "within one business day"
+urgent_response = "on the same business day"
+
+[general]
+rules = [
+  "Never give legal advice.  Do not tell the enquirer what their rights are, whether they have a case, what the law says, or what they should do about their legal problem.",
+  "Classify every enquiry into a practice area, even when the firm refers that kind of matter elsewhere.  Use out_of_scope only for areas the firm does not practise at all.",
+  "Check every named person and organisation for conflicts, including the enquirer.",
+  "Ask at most three clarifying questions, and only for information the practice area lists as required that the enquiry does not give.",
+]
+out_of_scope_areas = [
+  "Immigration and visas",
+  "Tax disputes with the Australian Taxation Office",
+  "Intellectual property, including trade marks and copyright",
+  "Personal insolvency and bankruptcy",
+  "Planning and environment",
+]
+
+[urgency]
+urgent = "Something must happen within 7 days, a time limit to start proceedings ends within 42 days, or someone's safety or liberty is at risk."
+time_sensitive = "A court, tribunal, or settlement date, or another deadline, is 8 to 42 days away, or a time limit to start proceedings ends 43 to 120 days from now."
+routine = "No date or risk that makes the matter urgent or time-sensitive."
+general_urgent_triggers = [
+  "A court, tribunal, or Fair Work Commission hearing or mention within 7 days.",
+  "Someone is in custody or has just been arrested.",
+  "A risk to anyone's safety, including family violence, or an intervention order application, hearing, or alleged breach.",
+  "Any deadline in the enquiry that falls within 7 days.",
+]
+
+[routing]
+book_consult = "The firm handles this kind of matter, the conflict check is clear, and the matter is not urgent."
+conflicts_partner_review = "The conflict check found a potential conflict.  This overrides every other route."
+decline_and_refer = "The firm does not act in this kind of matter.  Thank the enquirer and suggest they look for a lawyer who practises in the area.  Do not name a firm."
+urgent_human_review = "The matter is urgent, or the triage could not be completed safely.  A person reviews it the same day."
+
+[areas.employment]
+label = "Employment"
+covers = ["Unfair dismissal", "General protections claims", "Underpayment of wages and entitlements", "Workplace bullying, harassment, and discrimination complaints", "Employment contracts and restraints of trade"]
+refers = ["Workplace injury compensation claims belong under personal_injury"]
+urgency_triggers = [
+  "A dismissal that took effect within the last 21 days is urgent.  An application to the Fair Work Commission for an unfair dismissal remedy (Fair Work Act 2009 (Cth) s 394(2)) or to deal with a general protections dismissal dispute (s 366(1)) must generally be made within 21 days after the dismissal took effect.",
+  "A dismissal that took effect 22 to 120 days ago is time_sensitive, because a practitioner must assess any late application promptly.",
+]
+required_information = ["The employer's full legal name", "The date the dismissal took effect, if the enquirer was dismissed", "Whether the enquirer is still employed"]
+
+[areas.family]
+label = "Family law"
+covers = ["Separation and divorce", "Parenting arrangements", "Property settlement and spousal maintenance", "Family violence intervention orders"]
+refers = []
+urgency_triggers = [
+  "A risk to anyone's safety, an intervention order hearing, or a child about to be removed from Victoria is urgent.",
+  "Property settlement proceedings must generally start within 12 months after a divorce order takes effect (Family Law Act 1975 (Cth) s 44(3)), or within 2 years after a de facto relationship ends (s 44(5)).  Treat that limit as urgent when it is within 42 days and time_sensitive when it is 43 to 120 days away.",
+]
+required_information = ["The other party's full name", "Whether there are children under 18", "The date of separation, and the date any divorce order took effect", "Whether any court proceedings or orders already exist"]
+
+[areas.property_conveyancing]
+label = "Property and conveyancing"
+covers = ["Residential and commercial conveyancing", "Contracts of sale", "Commercial and retail leases", "Disputes between co-owners"]
+refers = ["Residential tenancy disputes before VCAT"]
+urgency_triggers = [
+  "A purchaser who signed a contract within the last 3 business days may still be in the cooling-off period (Sale of Land Act 1962 (Vic) s 31, which has exceptions).  Treat this as urgent.",
+  "A settlement date within 7 days is urgent.  A settlement date 8 to 42 days away is time_sensitive.",
+  "A notice to vacate, notice of default, or rescission notice is urgent.",
+]
+required_information = ["The property address", "Whether a contract has been signed, and the settlement date", "The full names of the other parties"]
+
+[areas.wills_estates]
+label = "Wills and estates"
+covers = ["Wills and powers of attorney", "Probate and letters of administration", "Estate administration", "Family provision claims"]
+refers = []
+urgency_triggers = [
+  "A person who wants to make or change a will and is seriously ill or in palliative care is urgent.",
+  "A family provision application must generally be made within 6 months after the grant of probate or letters of administration (Administration and Probate Act 1958 (Vic) s 99).  Treat that limit as urgent when it is within 42 days and time_sensitive when it is 43 to 120 days away.",
+]
+required_information = ["The full name of the will-maker or the deceased", "The date of death, if the person has died", "Whether probate or letters of administration have been granted, and when"]
+
+[areas.commercial_disputes]
+label = "Commercial disputes"
+covers = ["Contract disputes between businesses", "Debt recovery", "Partnership and shareholder disputes", "Statutory demands"]
+refers = []
+urgency_triggers = [
+  "A company served with a statutory demand within the last 21 days is urgent.  An application to set the demand aside must be filed and served within 21 days after service (Corporations Act 2001 (Cth) s 459G).",
+  "A court date within 7 days is urgent.  A court date 8 to 42 days away is time_sensitive.",
+]
+required_information = ["The other party's full legal name", "The amount in dispute", "Whether there is a written contract, and its date"]
+
+[areas.personal_injury]
+label = "Personal injury"
+covers = ["Transport accident claims", "Public liability claims", "Workplace injury claims"]
+refers = ["Medical negligence claims"]
+urgency_triggers = [
+  "An injury that happened more than 2 years and 6 months ago is urgent, because a limitation period may be close.  A practitioner must check the applicable limit the same day.",
+  "A claim form or insurer deadline within 7 days is urgent.",
+]
+required_information = ["The date of the injury", "How the injury happened, and where", "Whether a claim has already been lodged with an insurer or scheme"]
+
+[areas.criminal]
+label = "Criminal law"
+covers = ["Summary offences and traffic offences in the Magistrates' Court", "Bail applications"]
+refers = ["Indictable offences that will be tried in the County Court or the Supreme Court"]
+urgency_triggers = [
+  "Someone in custody, or a bail application, is urgent.",
+  "A court date within 7 days is urgent.  A court date 8 to 42 days away is time_sensitive.",
+]
+required_information = ["The charges", "The next court date and the court", "Whether the person is in custody or on bail"]
+
+[areas.out_of_scope]
+label = "Outside the firm's practice"
+covers = []
+refers = []
+urgency_triggers = ["Use the general urgency triggers.  An urgent out-of-scope matter still goes to urgent_human_review, so a person can make the referral the same day."]
+required_information = []
