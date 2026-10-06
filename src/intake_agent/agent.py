@@ -218,6 +218,8 @@ class ClaudeTriageAgent:
         api_failed = any(failure.kind == "api_error" for failure in failures)
         if last is not None and not api_failed:
             draft = self._read_final_turn(last, failures)
+        elif last is None and not failures:
+            failures.append(Failure(kind="unexpected_stop", detail="The loop ended without any response."))
 
         return AgentRun(
             draft=draft,

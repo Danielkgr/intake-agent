@@ -3,7 +3,7 @@ from datetime import date
 from typing import Any
 
 from fakes import ENQUIRY, ScriptedAPI, api_message, draft, final_answer, tool_turn, tool_use
-from intake_agent.agent import ClaudeTriageAgent
+from intake_agent.agent import AgentSettings, ClaudeTriageAgent
 from intake_agent.audit import Failure
 from intake_agent.conflicts import ConflictChecker, JsonConflictRegister, RegisterEntity
 from intake_agent.policy import load_policy
@@ -157,3 +157,12 @@ def test_register_outage_fails_closed() -> None:
     assert record.conflict.status is ConflictStatus.NOT_CHECKED
     assert record.routing.decision is Routing.URGENT_HUMAN_REVIEW
     assert record.failures[0].kind == "tool_error"
+
+
+def test_a_loop_with_no_response_still_fails_closed() -> None:
+    api = ScriptedAPI(final_answer())
+    agent = ClaudeTriageAgent(client=api.client(), settings=AgentSettings(max_turns=0))
+    record = agent.triage(ENQUIRY)
+    assert api.requests == []
+    assert [failure.kind for failure in record.failures] == ["unexpected_stop"]
+    assert record.routing.decision is Routing.URGENT_HUMAN_REVIEW
