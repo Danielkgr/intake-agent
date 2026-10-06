@@ -14,6 +14,7 @@ from typing import cast, get_args
 
 from intake_agent import __version__
 from intake_agent.agent import DEFAULT_MODEL, AgentSettings, ClaudeTriageAgent, Effort
+from intake_agent.baseline import RulesBaseline
 from intake_agent.evaluation import load_cases, provenance, run_cases, score, write_results
 from intake_agent.schema import Enquiry, EnquiryFields
 
@@ -91,10 +92,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Turn off server-side fallbacks to another model on a refusal",
     )
     triage.add_argument("--no-audit", action="store_true", help="Leave the audit trail out of the printed record")
+    triage.add_argument("--baseline", action="store_true", help="Use the offline rules baseline instead of Claude")
     _add_model_options(triage)
 
     evaluate = commands.add_parser("eval", help="Run the evaluation set and write results")
-    evaluate.add_argument("--arm", choices=["claude"], default="claude", help="Which triage to evaluate")
+    evaluate.add_argument(
+        "--arm", choices=["baseline", "claude"], default="baseline", help="Which triage to evaluate (default baseline)"
+    )
     evaluate.add_argument("--out", type=Path, help="Output directory (default results/<arm>)")
     evaluate.add_argument("--limit", type=int, help="Evaluate only the first N enquiries")
     _add_model_options(evaluate)
@@ -103,14 +107,17 @@ def build_parser() -> argparse.ArgumentParser:
 
 def run_triage(args: argparse.Namespace) -> int:
     enquiry = read_enquiry(args.path, args)
-    agent = ClaudeTriageAgent(settings=agent_settings(args, fallbacks=not args.no_fallbacks))
-    try:
-        record = agent.triage(enquiry)
-    except TypeError as exc:
-        if "authentication" in str(exc):
-            print(AUTH_HINT, file=sys.stderr)
-            return 2
-        raise
+    if args.baseline:
+        record = RulesBaseline().triage(enquiry)
+    else:
+        agent = ClaudeTriageAgent(settings=agent_settings(args, fallbacks=not args.no_fallbacks))
+        try:
+            record = agent.triage(enquiry)
+        except TypeError as exc:
+            if "authentication" in str(exc):
+                print(AUTH_HINT, file=sys.stderr)
+                return 2
+            raise
     output = record.model_dump(mode="json", exclude={"audit"} if args.no_audit else None)
     print(json.dumps(output, indent=2))
     if record.failures:
@@ -121,20 +128,25 @@ def run_triage(args: argparse.Namespace) -> int:
 
 def run_eval(args: argparse.Namespace, argv: Sequence[str]) -> int:
     cases = load_cases()[: args.limit] if args.limit else load_cases()
-    # A measurement harness must not let a fallback change the model being measured, so the
-    # evaluation turns fallbacks off and records refusals as their own outcome.
-    settings = agent_settings(args, fallbacks=False)
-    agent = ClaudeTriageAgent(settings=settings)
-    try:
-        records = run_cases(cases, agent.triage)
-    except TypeError as exc:
-        if "authentication" in str(exc):
-            print(AUTH_HINT, file=sys.stderr)
-            return 2
-        raise
+    if args.arm == "baseline":
+        records = run_cases(cases, RulesBaseline().triage)
+        settings: dict[str, object] | None = None
+    else:
+        # A measurement harness must not let a fallback change the model being measured, so the
+        # evaluation turns fallbacks off and records refusals as their own outcome.
+        agent_config = agent_settings(args, fallbacks=False)
+        agent = ClaudeTriageAgent(settings=agent_config)
+        try:
+            records = run_cases(cases, agent.triage)
+        except TypeError as exc:
+            if "authentication" in str(exc):
+                print(AUTH_HINT, file=sys.stderr)
+                return 2
+            raise
+        settings = asdict(agent_config)
     summary, results = score(cases, records, arm=args.arm)
     out_dir = args.out or Path("results") / args.arm
-    write_results(out_dir, summary, results, records, provenance(args.arm, asdict(settings), argv))
+    write_results(out_dir, summary, results, records, provenance(args.arm, settings, argv))
     print((out_dir / "report.md").read_text(encoding="utf-8"))
     return 0
 
