@@ -57,3 +57,12 @@ def test_dotenv_sets_missing_variables_only(tmp_path: Path, monkeypatch: pytest.
     assert os.environ["INTAKE_TEST_A"] == "already-set"
     assert os.environ["INTAKE_TEST_B"] == "quoted"
     assert "INTAKE_TEST_C" not in os.environ
+
+
+def test_triage_with_the_baseline_runs_offline(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    path = tmp_path / "enquiry.txt"
+    path.write_text("I want to register a trade mark for my bakery.", encoding="utf-8")
+    assert main(["triage", str(path), "--baseline", "--received-date", "2026-09-29"]) == 0
+    record = json.loads(capsys.readouterr().out)
+    assert record["arm"] == "baseline"
+    assert record["routing"]["decision"] == "decline_and_refer"
