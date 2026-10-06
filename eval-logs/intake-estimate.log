@@ -1,0 +1,12 @@
+ESTIMATE, not a measurement.  claude-opus-5-5 at $4 / $20 per million input / output tokens, cache reads $0.20, five-minute cache writes $5.
+
+| Measured from the code | Characters | Tokens at 3 characters each |
+|---|---|---|
+| Cached prefix: tools, system prompt, policy summary, output schema | 11,688 | 3,896 |
+| Average enquiry message over the evaluation set | 424 | 141 |
+| Tool results per tool turn | 1,238 | 413 |
+
+| Scenario | Requests | Output tokens per tool turn | Output tokens, final turn | Per enquiry, warm cache | Per enquiry, no cache |
+|---|---|---|---|---|---|
+| Typical | 3 | 500 | 1,500 | $0.064 | $0.111 |
+| Heavy | 4 | 1,000 | 3,000 | $0.148 | $0.222 |
