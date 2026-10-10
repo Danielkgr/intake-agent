@@ -4,8 +4,11 @@ __pycache__/
 *.egg-info/
 build/
 dist/
-.venv/
-venv/
+.venv*/
+venv*/
+env/
+ENV/
+.conda/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
