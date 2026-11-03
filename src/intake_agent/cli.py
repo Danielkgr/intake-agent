@@ -68,7 +68,7 @@ def agent_settings(args: argparse.Namespace, *, fallbacks: bool) -> AgentSetting
 
 
 def _add_model_options(parser: argparse.ArgumentParser) -> None:
-    parser.add_argument("--model", help=f"Claude model ID (default {DEFAULT_MODEL}, or INTAKE_AGENT_MODEL)")
+    parser.add_argument("--model", help=f"Model ID (default {DEFAULT_MODEL}, or INTAKE_AGENT_MODEL)")
     parser.add_argument("--effort", choices=get_args(Effort), help="Output effort (default medium)")
     parser.add_argument("--max-turns", type=int, help="Cap on model turns per enquiry (default 8)")
 
@@ -93,7 +93,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Turn off server-side fallbacks to another model on a refusal",
     )
     triage.add_argument("--no-audit", action="store_true", help="Leave the audit trail out of the printed record")
-    triage.add_argument("--baseline", action="store_true", help="Use the offline rules baseline instead of Claude")
+    triage.add_argument("--baseline", action="store_true", help="Use the offline rules baseline instead of the model")
     _add_model_options(triage)
 
     evaluate = commands.add_parser("eval", help="Run the evaluation set and write results")
@@ -104,7 +104,7 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--limit", type=int, help="Evaluate only the first N enquiries")
     _add_model_options(evaluate)
 
-    commands.add_parser("estimate-cost", help="Estimate the Claude arm's cost per enquiry from prompt sizes")
+    commands.add_parser("estimate-cost", help="Estimate the agent arm's cost per enquiry from prompt sizes")
     return parser
 
 
