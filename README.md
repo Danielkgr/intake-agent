@@ -2,21 +2,21 @@
 
 # Intake Agent
 
-### An agent that triages law-firm enquiries, checks conflicts through a tool, and sends every doubtful case to a person
+**An agent that triages law-firm enquiries and sends every doubtful case to a person**
 
-![CI](https://img.shields.io/github/actions/workflow/status/Danielkgr/intake-agent/ci.yml?branch=main&style=for-the-badge&label=CI) ![30 synthetic enquiries](https://img.shields.io/badge/eval-30_synthetic_enquiries-0969da?style=for-the-badge) ![Agent arm measured on the live API](https://img.shields.io/badge/Agent_arm-measured_live-1a7f37?style=for-the-badge) ![runs offline on the baseline](https://img.shields.io/badge/baseline-runs_offline-8250df?style=for-the-badge) ![MIT licence](https://img.shields.io/badge/licence-MIT-57606a?style=for-the-badge)
+30 synthetic enquiries · agent arm measured on the live API · baseline runs offline · MIT licence
+
+[![CI](https://github.com/Danielkgr/intake-agent/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Danielkgr/intake-agent/actions/workflows/ci.yml)
 
 </div>
 
-<br>
-
-> Client intake looks like the easy place to start with AI in a law firm, and it is where a firm can least afford a quiet mistake.  A missed conflict, a lost limitation date, or a friendly reply that strays into advice lands on the firm, not on the software.  This agent uses an assistant, backed by the Anthropic SDK, to read the enquiry and draft the record, then **runs the conflict check, the routing rules, and an advice check on the reply in code that no enquiry and no model output can change**.  An evaluation says how often the triage is right, and the deployment notes say what a firm must decide before it trusts any of it.
-
-<br>
+---
 
 ## What it does
 
-It reads a new enquiry, from a web form or an email, and produces a triage record for the firm's intake team.
+The agent reads a new enquiry, from a web form or an email, and produces a triage record for the firm's intake team.
+
+A mistake at intake lands on the firm: a missed conflict, a lost limitation date, or a reply that strays into advice.  So the model, called through the Anthropic SDK, only reads the enquiry and drafts the record.  Code that no enquiry and no model output can change runs the conflict check, the routing rules, and an advice check on the reply.  The [evaluation](#results) reports how often the triage is right, and the [deployment notes](#what-a-firm-must-decide-before-deploying-this) list what a firm must decide before it relies on the agent.
 
 | Field | What it holds |
 |---|---|
@@ -33,9 +33,7 @@ It reads a new enquiry, from a web form or an email, and produces a triage recor
 > [!CAUTION]
 > This is a working prototype and gives no legal advice.  Every enquiry, person, business, and matter in it is invented, and so are the firm, Quollridge Lawyers, and its intake policy.  It has never been deployed and has never seen real client data.  The policy names some statutory time limits, checked against public sources in October 2026, but nothing here should be relied on for a real matter.
 
-It is a working prototype.  The rules baseline runs offline and has been evaluated.  The agent arm is tested against a mocked API and has been **run once against the live API**, on 6 October 2026, for $0.90.
-
-<br>
+The rules baseline runs offline, and I have evaluated it.  The tests drive the agent arm against a mocked API, and I have **run it once against the live API**, on 6 October 2026, for $0.90.
 
 ## Results
 
@@ -50,12 +48,12 @@ It is a working prototype.  The rules baseline runs offline and has been evaluat
 | Holding replies flagged by the advice check | 0 | 0 |
 | Missing-information cases with a clarifying question | 4 / 4 | 4 / 4 |
 
-Each column comes from one run on 6 October 2026, the agent arm with `claude-opus-5-5` at `medium` effort against the live API.  [results/baseline/PROVENANCE.md](results/baseline/PROVENANCE.md) and [results/claude/PROVENANCE.md](results/claude/PROVENANCE.md) record the command, the code revision, and the data version and hash, and the records and per-case scores sit beside them.  Every agent record also carries its audit trail of model turns, tool calls, and tool results.
+Each column comes from one run on 6 October 2026.  The agent arm used `claude-opus-5-5` at `medium` effort against the live API.  [results/baseline/PROVENANCE.md](results/baseline/PROVENANCE.md) and [results/claude/PROVENANCE.md](results/claude/PROVENANCE.md) record the command, the code revision, and the data version and hash.  The records and per-case scores sit beside them.  Every agent record also carries its audit trail of model turns, tool calls, and tool results.
 
 > [!IMPORTANT]
-> A perfect baseline score is not evidence that keyword rules can triage legal enquiries.  The same person wrote the 30 enquiries, their labels, and the rules, and wrote the rules with the enquiries in view.  The score shows that the set is easy for someone who knows it.  The second example under [Running it](#running-it) shows the gap: the rules call a locked-out tenant who needs "to get back in this week" routine, because no rule covers that phrase and no enquiry in the set uses it.  The baseline is an optimistic reference, not a fair competitor.
+> A perfect baseline score does not show that keyword rules can triage legal enquiries.  I wrote the 30 enquiries, their labels, and the rules, and I wrote the rules with the enquiries in view.  The score shows that the set is easy for someone who knows it.  The second example under [Running it](#running-it) shows the gap: the rules call a locked-out tenant who needs "to get back in this week" routine, because no rule covers that phrase and no enquiry in the set uses it.  Treat the baseline as an optimistic reference.
 >
-> The agent arm's perfect score has the same limit.  Both arms score 30 of 30, so the set cannot tell them apart, and neither result says how either would do on real enquiries.  In both arms the conflict status and the conflict route are set by the tool and the code re-check, so those rows test that code at least as much as the model.  What the agent run does show is the agent working end to end on the live API, with no failures, no advice flags, and no ungrounded summary statements, at a measured cost.
+> The agent arm's perfect score has the same limit.  Both arms score 30 of 30, so the set cannot tell them apart, and neither result says how either would do on real enquiries.  In both arms the tool and the code re-check set the conflict status and the conflict route, so those rows test that code at least as much as the model.  The agent run does show the agent working end to end on the live API, with no failures, no advice flags, and no ungrounded summary statements, at a measured cost.
 
 ### The agent arm
 
@@ -63,9 +61,9 @@ Each column comes from one run on 6 October 2026, the agent arm with `claude-opu
 ANTHROPIC_API_KEY=... intake-agent eval --arm claude
 ```
 
-That command triages all 30 enquiries with `claude-opus-5-5` at `medium` effort, one at a time so each request can read the cached prefix, and writes `results/claude/` in the same shape as the baseline.  Server-side fallbacks are off in the evaluation, so a refusal is recorded as a refusal instead of being answered by a different model.
+That command triages all 30 enquiries with `claude-opus-5-5` at `medium` effort, one at a time so each request can read the cached prefix, and writes `results/claude/` in the same shape as the baseline.  Server-side fallbacks are off in the evaluation, so the run records a refusal as a refusal and no other model answers in its place.
 
-The cost below is **measured**.  It is summed from the `usage` block the API returned for each of the run's requests, and priced at the list prices for Claude Opus 5.5 in [pricing.py](src/intake_agent/pricing.py), which are $4 per million input tokens, $20 per million output tokens, $0.20 per million for cache reads, and $5 per million for five-minute cache writes.  The invoice is the authority.
+The cost below is **measured**.  I summed it from the `usage` block the API returned for each of the run's requests, and priced it at the list prices for Claude Opus 5.5 in [pricing.py](src/intake_agent/pricing.py), which are $4 per million input tokens, $20 per million output tokens, $0.20 per million for cache reads, and $5 per million for five-minute cache writes.  The invoice is the authority.
 
 | Measure | All 30 enquiries | Per enquiry |
 |---|:--:|:--:|
@@ -76,11 +74,9 @@ The cost below is **measured**.  It is summed from the `usage` block the API ret
 | Output tokens | 32,666 | 1,089 |
 | Cost | $0.9028 | $0.0301 |
 
-The cached prefix did its job.  At the same prices the same tokens with no caching would have cost about $2.07, so caching cut the cost of the run by about 56%.  Output was 72% of what the run cost.
+Caching worked.  At the same prices the same tokens with no caching would have cost about $2.07, so caching cut the cost of the run by about 56%.  Output was 72% of what the run cost.
 
 Before the run, `intake-agent estimate-cost` put the evaluation at roughly $2 to $7.  It measures the prompt from the code and then guesses the number of turns and the output lengths, and the model needed fewer turns and wrote less than it assumed.  It still prints that estimate, for a first look at a changed prompt or policy before any paid run.
-
-<br>
 
 ## How it works
 
@@ -127,7 +123,7 @@ The register sits behind a small `ConflictRegister` protocol.  A JSON file of 16
 
 ### Rules enforced in code
 
-These apply to both arms, after the triage step, whatever the draft says.
+The code applies these rules to both arms, after the triage step, whatever the draft says.
 
 | Rule | Effect |
 |---|---|
@@ -138,7 +134,7 @@ These apply to both arms, after the triage step, whatever the draft says.
 | The advice check reads the reply | A deterministic scan for advice-like language, such as "you should", "you have a strong case", a section number, or an Act's name.  If it trips, the reply is replaced with a neutral one and the record goes to a person.  A pattern list can miss advice phrased in a way it does not expect. |
 | Urgent means a person, today | An urgent matter is never booked as a routine consult, and no consult is booked without a clear conflict check |
 
-The enquiry is fenced as data.  Any text in it that imitates the tags around it is removed, the system prompt says that instructions inside it are to be ignored, and every tool is read-only.  The evaluation includes one prompt-injection enquiry, which asks the system to skip the conflict check and promise a strong case.
+The agent fences the enquiry as data.  It removes any text in the enquiry that imitates the tags around it, the system prompt tells the model to ignore instructions inside it, and every tool is read-only.  The evaluation includes one prompt-injection enquiry, which asks the system to skip the conflict check and promise a strong case.
 
 ### The conflict check
 
@@ -149,9 +145,7 @@ The enquiry is fenced as data.  Any text in it that imitates the tags around it 
 | Any other party | Adverse party only | Known adverse party, no conflict |
 | Any other party | Client or related party | Potential conflict |
 
-Names are compared after removing case, accents, punctuation, titles, a leading "the", and company designators such as "Pty. Ltd.".  On top of an exact match, the checker flags reordered names ("ASHDOWN-PRYCE, Corin"), initials and missing middle names ("Petra A. Lindqvist"), one misspelt word of five or more letters ("Corvid Analytcs"), and partial names: a shorter name whose distinctive words all appear in the longer one, a surname on its own, or the first distinctive word of a business ("Velloran Property Group" against "Velloran Properties Pty Ltd").  The rules lean towards flagging, because a false alarm costs a partner a minute and a missed conflict can cost far more.
-
-<br>
+The checker compares names after removing case, accents, punctuation, titles, a leading "the", and company designators such as "Pty. Ltd.".  On top of an exact match, the checker flags reordered names ("ASHDOWN-PRYCE, Corin"), initials and missing middle names ("Petra A. Lindqvist"), one misspelt word of five or more letters ("Corvid Analytcs"), and partial names: a shorter name whose distinctive words all appear in the longer one, a surname on its own, or the first distinctive word of a business ("Velloran Property Group" against "Velloran Properties Pty Ltd").  The rules lean towards flagging, because a false alarm costs a partner a minute and a missed conflict can cost far more.
 
 ## Running it
 
@@ -173,7 +167,7 @@ intake-agent eval --arm claude
 intake-agent estimate-cost
 ```
 
-A `.txt` file is read as the enquiry text, with `--received-date`, `--channel`, `--name`, and `--email` filling the rest.  A `.json` file follows the shape of [examples/conflict.json](examples/conflict.json).  The triage command prints the record as JSON.  `--model`, `--effort`, and `--max-turns` override the defaults, as do `INTAKE_AGENT_MODEL`, `INTAKE_AGENT_EFFORT`, and `INTAKE_AGENT_MAX_TURNS`, and `--no-fallbacks` turns fallbacks off for a single triage.
+The command reads a `.txt` file as the enquiry text, with `--received-date`, `--channel`, `--name`, and `--email` filling the rest.  A `.json` file follows the shape of [examples/conflict.json](examples/conflict.json).  The triage command prints the record as JSON.  `--model`, `--effort`, and `--max-turns` override the defaults, as do `INTAKE_AGENT_MODEL`, `INTAKE_AGENT_EFFORT`, and `INTAKE_AGENT_MAX_TURNS`, and `--no-fallbacks` turns fallbacks off for a single triage.
 
 ```bash
 pytest
@@ -183,8 +177,6 @@ mypy
 ```
 
 The tests never call the real API.  They drive the agent through `httpx2.MockTransport`, the mock transport of the HTTP library that the Anthropic SDK uses since version 1.  They cover a full tool-use loop to a valid record, a tool error returned with `is_error`, a conflict that overrides the model's own routing, refusals, `max_tokens` stops, invalid output, the turn cap, API errors, fallback reporting, the advice check, grounding, the conflict matching rules and decision table, the evaluation scorer, the baseline, and the command line.
-
-<br>
 
 ## What a firm must decide before deploying this
 
@@ -201,8 +193,6 @@ The prototype makes none of these decisions.  Each belongs to the firm, and most
 | **Accessibility** | Whether the form and the replies work for people who use screen readers, people with limited English, and people who would rather telephone, so that triage never becomes the only way in. | A command line only.  No form and no translation. |
 | **Telling enquirers** | Whether and how to tell people that software triages their enquiry and that a person reviews it. | The draft reply does not say that software prepared it. |
 | **Privacy obligations** | Where they apply to the firm, the Australian Privacy Principles in the *Privacy Act 1988* (Cth) bear on notice at collection (APP 5), disclosure overseas (APP 8), and security (APP 11).  From 10 December 2026, APP 1.7 to 1.9, added by the *Privacy and Other Legislation Amendment Act 2024* (Cth), require a privacy policy to describe certain decisions that a computer program makes, or substantially supports, using personal information, where the decision could significantly affect a person's rights or interests.  Whether intake triage is such a decision is a question for the firm's privacy adviser. | Not assessed. |
-
-<br>
 
 ## Layout
 
@@ -232,8 +222,6 @@ results/claude/    The agent arm's evaluation run on the live API, with PROVENAN
 eval-logs/         The console output of the agent run and of the estimate before it
 tests/             Tests with a mocked Messages API
 ```
-
-<br>
 
 ## Licence
 
